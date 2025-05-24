@@ -17,16 +17,11 @@ canvas {
   box-sizing: border-box;
 }
 
- 
 #template3 canvas {
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 4;
 }
-
- 
-
-
 
 .lexend-deca {
   font-family: "Lexend Deca", sans-serif;
@@ -211,14 +206,12 @@ canvas {
   box-shadow: none;
 }
 
-
 .tooltip-text {
   white-space: nowrap;
   pointer-events: none;
 }
 
-
-/* From Uiverse.io by Zameerahmad01 */ 
+/* From Uiverse.io by Zameerahmad01 */
 ul {
   list-style: none;
 }
@@ -234,12 +227,15 @@ ul {
   margin: 0 10px;
   position: relative;
 }
- 
+
 .example-2 .icon-content .tooltip {
-   position: absolute;
+  position: absolute;
   top: 20%;
   left: -10px; /* Dekatkan ke kiri elemen */
-  transform: translate(-100%, -50%); /* Pindahkan ke kiri penuh dan tengah secara vertikal */
+  transform: translate(
+    -100%,
+    -50%
+  ); /* Pindahkan ke kiri penuh dan tengah secara vertikal */
   color: #fff;
   background-color: #333; /* fallback jika tidak dari sosial */
   padding: 6px 10px;
@@ -318,7 +314,6 @@ ul {
 .example-2 .icon-content a[data-social="youtube"] ~ .tooltip {
   background-color: #ff0000;
 }
-
 
 /* 
 /* sound */
@@ -412,4 +407,38 @@ ul {
   width: 0%;
   background-color: rgb(22, 187, 22);
   transition: width 0.1s linear;
+}
+
+/* loading */
+
+/*  */
+/* text animasi */
+.text-focus-in {
+	-webkit-animation: text-focus-in 1.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: text-focus-in 1.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+}
+ 
+@-webkit-keyframes text-focus-in {
+  0% {
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
+}
+@keyframes text-focus-in {
+  0% {
+    -webkit-filter: blur(12px);
+            filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+            filter: blur(0px);
+    opacity: 1;
+  }
 }
