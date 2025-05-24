@@ -1,3 +1,6 @@
+// dark mode langsung
+document.documentElement.classList.add("dark");
+// camera
 let video = document.getElementById("video");
 let timerDisplay = document.getElementById("timer");
 const timeSelect = document.getElementById("timeSelect");
@@ -45,8 +48,8 @@ const photoArea3 = document.getElementById('template3');
 const photoArea4 = document.getElementById('template4');
 
 // warna default
-const defaultStart = '#4b4a50';
-const defaultEnd = '#232224';
+const defaultStart = '#474747';
+const defaultEnd = '#1d1c1d';
 
 // fungsi update gradasi
 function updateGradient() {
@@ -263,7 +266,7 @@ document.getElementById("templateSelector").addEventListener("change", function 
         syncCanvasContent("canvas4", "canvas4_copy");
         syncCanvasContent("canvas5", "canvas5_copy");
         syncCanvasContent("canvas6", "canvas6_copy");
-    }  else {
+    } else {
         // Jika opsi lain dipilih, tampilkan template sesuai pilihan
         document.getElementById(selectedTemplate).classList.remove("hidden");
         document.getElementById("photo-container").classList.remove("hidden");
@@ -586,3 +589,5 @@ function uploadToCanvasById(event, canvasId) {
     };
     reader.readAsDataURL(file);
 }
+
+
