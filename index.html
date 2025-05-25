@@ -106,12 +106,13 @@
                 <source src="./spotify_loading.mp4" type="video/mp4">
                 Browser kamu tidak mendukung video.
             </video>
-            
+
             <div class="text-focus-in font-extralight text-sm">
-                Spotify X ARTWORKHEX 
+                Spotify X ARTWORKHEX
             </div>
 
-            <p class="flex items-end justify-center mt-[95%] text-zinc-500 font-extralight text-xs">Designed by Hafiz Alwan | © 2024 All Rights Reserved</p>
+            <p class="flex items-end justify-center mt-[95%] text-zinc-500 font-extralight text-xs">Designed by Hafiz
+                Alwan | © 2024 All Rights Reserved</p>
         </div>
     </div>
 
@@ -527,8 +528,9 @@
                                         <!-- Info Lagu -->
                                         <div class="flex justify-between items-center text-zinc-50 mb-2">
                                             <div>
-                                                <h1 class="text-2xl font-bold">About You</h1>
-                                                <p class="text-zinc-300">The 1975</p>
+                                                <h1 id="judul" class="text-2xl font-bold">About You</h1>
+                                                <p id="penyanyi" class="text-zinc-300">The 1975</p>
+
                                             </div>
                                             <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="20"
                                                 height="20" fill="currentColor" viewBox="0 0 20 20">
@@ -556,7 +558,7 @@
                                                     d="m21.706 17.708l-2.999 3a1 1 0 0 1-1.414-1.415L18.586 18h-3.321a5 5 0 0 1-4.288-2.428l-3.67-6.115A3 3 0 0 0 4.736 8H3a1 1 0 0 1 0-2h1.735a5 5 0 0 1 4.288 2.428l3.67 6.115A3 3 0 0 0 15.264 16h3.32l-1.292-1.293a1 1 0 0 1 1.414-1.414l3 3c.195.194.292.45.293.704V17a1 1 0 0 1-.294.708z" />
                                             </g>
                                         </svg>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        <svg id="prev-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                             viewBox="0 0 512 512">
                                             <path fill="currentColor"
                                                 d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
@@ -569,8 +571,8 @@
                                                         d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4" />
                                                 </svg></button>
                                         </div>
-                                        <svg class="rotate-180" xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 512 512">
+                                        <svg id="next-btn" class="rotate-180" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 512 512">
                                             <path fill="currentColor"
                                                 d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
                                         </svg>
@@ -832,9 +834,12 @@
                     loadingScreen.style.display = 'none';
                     mainContent.style.display = 'block';
                 }
-            }, 5000); // 5000 milidetik = 5 detik
+            }, 5000); 
         });
 
+
+
+        // song
         const audio = document.getElementById("audio");
         const playBtn = document.getElementById("play-btn");
         const progress = document.querySelector(".progress");
@@ -844,38 +849,74 @@
         const volumeSlider = document.querySelector(".volume-slider");
         const volumeFill = document.querySelector(".volume-fill");
 
-        // Play / Pause
+        const judulEl = document.getElementById("judul");
+        const penyanyiEl = document.getElementById("penyanyi");
+        const nextBtn = document.getElementById("next-btn");
+        const prevBtn = document.getElementById("prev-btn");
+
+        const laguList = [
+            { judul: "About You", penyanyi: "The 1975", file: "./src/about_you-the1945.mp3" },
+            { judul: "Janji Setia", penyanyi: "Tiara Andini", file: "./src/Janji_Setia-Tiara_Andini.mp3" },
+            // { judul: "Yellow", penyanyi: "Coldplay", file: "./src/Coldplay - Yellow.mp3" }
+        ];
+
+        let laguIndex = 0;
+
+        function loadLagu(index) {
+            const lagu = laguList[index];
+            audio.src = lagu.file;
+            judulEl.textContent = lagu.judul;
+            penyanyiEl.textContent = lagu.penyanyi;
+            audio.load();
+            playAudio(); // auto play saat next/prev
+        }
+
+        function playAudio() {
+            audio.play();
+            playBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                <path fill="currentColor" d="M14 19V5h4v14zm-8 0V5h4v14z"/>
+            </svg>`;
+        }
+
+        function pauseAudio() {
+            audio.pause();
+            playBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                <path fill="currentColor" d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4"/>
+            </svg>`;
+        }
+
         playBtn.addEventListener("click", () => {
             if (audio.paused) {
-                audio.play();
-                playBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-            <path fill="currentColor" d="M14 19V5h4v14zm-8 0V5h4v14z"/>
-        </svg>`;
+                playAudio();
             } else {
-                audio.pause();
-                playBtn.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-            <path fill="currentColor" d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4"/>
-        </svg>`;
+                pauseAudio();
             }
         });
 
-        // Update duration
+        nextBtn.addEventListener("click", () => {
+            laguIndex = (laguIndex + 1) % laguList.length;
+            loadLagu(laguIndex);
+        });
+
+        prevBtn.addEventListener("click", () => {
+            laguIndex = (laguIndex - 1 + laguList.length) % laguList.length;
+            loadLagu(laguIndex);
+        });
+
         audio.addEventListener("loadedmetadata", () => {
             durationEl.textContent = formatTime(audio.duration);
             audio.volume = 0.75;
-            volumeFill.style.width = "75%";
+            if (volumeFill) volumeFill.style.width = "75%";
         });
 
-        // Update progress + current time
         audio.addEventListener("timeupdate", () => {
             const percent = (audio.currentTime / audio.duration) * 100;
             progress.style.width = `${percent}%`;
             currentTimeEl.textContent = formatTime(audio.currentTime);
         });
 
-        // Klik timeline untuk seek
         timeline.addEventListener("click", (e) => {
             const width = timeline.clientWidth;
             const clickX = e.offsetX;
@@ -883,22 +924,24 @@
             audio.currentTime = (clickX / width) * duration;
         });
 
-        // Volume slider
-        volumeSlider.addEventListener("click", (e) => {
-            const width = volumeSlider.offsetWidth;
-            const clickX = e.offsetX;
-            const volume = clickX / width;
-            audio.volume = volume;
-            volumeFill.style.width = `${volume * 100}%`;
-        });
+        if (volumeSlider) {
+            volumeSlider.addEventListener("click", (e) => {
+                const width = volumeSlider.offsetWidth;
+                const clickX = e.offsetX;
+                const volume = clickX / width;
+                audio.volume = volume;
+                if (volumeFill) volumeFill.style.width = `${volume * 100}%`;
+            });
+        }
 
-        // Helper
         function formatTime(seconds) {
             const minutes = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
             return `${minutes}:${secs}`;
         }
 
+        // Muat lagu pertama
+        loadLagu(laguIndex);
 
 
     </script>
