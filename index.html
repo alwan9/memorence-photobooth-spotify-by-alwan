@@ -111,8 +111,9 @@
                 Spotify X ARTWORKHEX
             </div>
 
-            <p class="flex items-end justify-center mt-[95%] text-zinc-500 font-extralight text-xs">Designed by Hafiz
-                Alwan | © 2024 All Rights Reserved</p>
+            <p class="flex items-end justify-center md:mt-0 mt-[95%] text-zinc-500 font-extralight text-xs">Designed by
+                Hafiz
+                Alwan | © 2025 All Rights Reserved</p>
         </div>
     </div>
 
@@ -249,7 +250,16 @@
                                 class="font-semibold hover:text-green-400 duration-100 duration-300 cursor-pointer"
                                 href="https://www.instagram.com/zzls__/" target="_blank"> By Alwan </a> Versi 1.2
                         </p>
-                        <img class="h-[30px] mt-5" src="./src/assets/Spotify_Logo_RGB_Green.png" alt="">
+                        <!-- logo -->
+                        <div class=" flex gap-3 items-center  mt-5 ">
+                            <img class="h-[30px]" src="./src/assets/Spotify_Logo_RGB_Green.png" alt="">
+                            <span class="dark:text-zinc-50 text-zinc-950s text-base md:text-2xl ">
+                                X
+                            </span>
+                            <img class="h-[20px] md:h-[23px] hidden dark:block" src="./src/assets/logo.png" alt="">
+                            <img class="h-[15px] md:h-[17px] dark:hidden block opacity-35" src="./src/assets/logo-b.png"
+                                alt="">
+                        </div>
                     </div>
                     <div
                         class="mt-5 relative text-zinc-50 bg-zinc-100 dark:bg-zinc-900 dark:border-zinc-200/20 dark:border  shadow-xl py-5 px-2 md:px-10 rounded-md">
@@ -318,7 +328,7 @@
 
                         <div class="grid grid-cols-2 gap-2">
                             <button onclick="startCamera()"
-                                class=" w-full  cursor-pointer duration-200  hover:bg-green-800   border-green-400   border-2 dark:bg-zinc-900 dark:border-zinc-200/20 mt-3  px-4 py-2  rounded flex gap-2 items-center justify-center">
+                                class=" w-full  cursor-pointer duration-200 hover:bg-zinc-300 dark:hover:bg-green-800  border-zinc-500 dark:border-green-400   text-zinc-950  dark:text-zinc-50  border-2 dark:bg-zinc-900 dark:border-zinc-200/20 mt-3  px-4 py-2  rounded flex gap-2 items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 56 56">
                                     <path fill="currentColor"
                                         d="M7.809 50.348H48.19c4.875 0 7.36-2.438 7.36-7.266V18.543c0-4.828-2.485-7.242-7.36-7.242h-5.484c-1.828 0-2.39-.375-3.445-1.547l-1.899-2.11c-1.248-1.288-2.343-1.992-4.781-1.992h-9.328c-2.414 0-3.61.704-4.781 1.992l-1.899 2.11c-1.031 1.248-1.617 1.547-3.445 1.547h-5.32c-4.875 0-7.36 2.414-7.36 7.242v24.539c0 4.828 2.485 7.266 7.36 7.266m.07-3.774c-2.32 0-3.656-1.242-3.656-3.68v-24.14c0-2.438 1.336-3.68 3.656-3.68h6.187c2.11 0 3.235-.398 4.407-1.71l1.851-2.063c1.336-1.5 2.016-1.875 4.102-1.875h6.984c2.086 0 2.766.375 4.102 1.875l1.851 2.062c1.272 1.313 2.297 1.711 4.407 1.711h6.351c2.32 0 3.657 1.242 3.657 3.68v24.14c0 2.438-1.336 3.68-3.657 3.68Zm20.11-3.726a12.76 12.76 0 0 0 12.796-12.82c0-7.126-5.672-12.82-12.797-12.82c-7.078 0-12.773 5.694-12.773 12.82c0 7.124 5.695 12.82 12.773 12.82m16.851-18.54c1.594 0 2.906-1.288 2.906-2.882a2.906 2.906 0 1 0-5.812 0c0 1.594 1.312 2.883 2.906 2.883m-16.85 14.977c-5.086 0-9.234-4.125-9.234-9.258s4.125-9.257 9.234-9.257a9.247 9.247 0 0 1 9.258 9.257a9.247 9.247 0 0 1-9.258 9.258" />
@@ -520,17 +530,16 @@
 
                                 </div>
                                 <!-- sound nya disini -->
-                                <div class="audio-player">
+                                <div class="audio-player player">
 
-                                    <div class="w-full  max-w-md mx-auto mt-10 text-white">
-                                        <audio id="audio" src="./src/The 1975 - About You (Official).mp3"></audio>
+                                    <div class="w-full max-w-md mx-auto mt-10 text-white">
+                                        <audio class="audio" src="./song/about_you-the1945.mp3"></audio>
 
                                         <!-- Info Lagu -->
                                         <div class="flex justify-between items-center text-zinc-50 mb-2">
                                             <div>
-                                                <h1 id="judul" class="text-2xl font-bold">About You</h1>
-                                                <p id="penyanyi" class="text-zinc-300">The 1975</p>
-
+                                                <h1 class="judul text-2xl font-bold">About You</h1>
+                                                <p class="penyanyi text-zinc-300">The 1975</p>
                                             </div>
                                             <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="20"
                                                 height="20" fill="currentColor" viewBox="0 0 20 20">
@@ -539,12 +548,14 @@
                                             </svg>
                                         </div>
                                     </div>
+
                                     <!-- Progress Bar -->
                                     <div class="timeline">
                                         <div class="progress"></div>
                                     </div>
+
                                     <div class="time-section text-zinc-50">
-                                        <span id="current">0:00</span> / <span id="duration">0:00</span>
+                                        <span class="current">0:00</span> / <span class="duration">0:00</span>
                                     </div>
                                     <!-- tombol -->
                                     <div
@@ -558,21 +569,22 @@
                                                     d="m21.706 17.708l-2.999 3a1 1 0 0 1-1.414-1.415L18.586 18h-3.321a5 5 0 0 1-4.288-2.428l-3.67-6.115A3 3 0 0 0 4.736 8H3a1 1 0 0 1 0-2h1.735a5 5 0 0 1 4.288 2.428l3.67 6.115A3 3 0 0 0 15.264 16h3.32l-1.292-1.293a1 1 0 0 1 1.414-1.414l3 3c.195.194.292.45.293.704V17a1 1 0 0 1-.294.708z" />
                                             </g>
                                         </svg>
-                                        <svg id="prev-btn" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 512 512">
+                                        <svg class="prev-btn cursor-pointer" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 512 512">
                                             <path fill="currentColor"
                                                 d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
                                         </svg>
                                         <div
                                             class="play-section text-zinc-950 w-[50px] h-[50px] bg-zinc-50 rounded-full flex items-center justify-center">
-                                            <button id="play-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                            <button class="play-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
                                                     height="24" viewBox="0 0 24 24">
                                                     <path fill="currentColor"
                                                         d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4" />
                                                 </svg></button>
                                         </div>
-                                        <svg id="next-btn" class="rotate-180" xmlns="http://www.w3.org/2000/svg"
-                                            width="24" height="24" viewBox="0 0 512 512">
+                                        <svg class="next-btn cursor-pointer rotate-180"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 512 512">
                                             <path fill="currentColor"
                                                 d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
                                         </svg>
@@ -588,6 +600,7 @@
                                     </div>
                                 </div>
                                 <!--  -->
+
                             </div>
                         </div>
                     </div>
@@ -695,12 +708,71 @@
 
                                 </div>
 
-                                <!-- teks -->
-                                <div class="text-center text-zinc-50 mt-5">
-                                    <h1 class="  font-bold text-4xl lexend-deca">MEMORENCE</h1>
-                                    <p class=" text-zinc-300 birthstone-regular text-3xl"> Photobooth Memorence Versi
-                                        1.2
-                                    </p>
+                                <!-- audio spotify -->
+                                <div class="audio-player player">
+                                    <div class="w-full max-w-md mx-auto mt-10 text-white">
+                                        <audio class="audio" src="./song/about_you-the1945.mp3"></audio>
+                                        <!-- Info Lagu -->
+                                        <div class="flex justify-between items-center text-zinc-50 mb-2">
+                                            <div>
+                                                <h1 class="judul text-2xl font-bold">About You</h1>
+                                                <p class="penyanyi text-zinc-300">The 1975</p>
+                                            </div>
+                                            <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M14.75 1A5.24 5.24 0 0 0 10 4A5.24 5.24 0 0 0 0 6.25C0 11.75 10 19 10 19s10-7.25 10-12.75A5.25 5.25 0 0 0 14.75 1" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <!-- Progress Bar t 2-->
+                                    <div class="timeline">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="time-section text-zinc-50">
+                                        <span class="current">0:00</span> / <span class="duration">0:00</span>
+                                    </div>
+                                    <!-- tombol -->
+                                    <div
+                                        class="text-center px-[10%] audio-controls text-zinc-50 mt-5 flex justify-around items-center ">
+                                        <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M21.924 6.617a1 1 0 0 0-.217-.324l-3-3a1 1 0 1 0-1.414 1.414L18.586 6h-3.321a5 5 0 0 0-4.288 2.428l-3.67 6.115A3 3 0 0 1 4.736 16H3a1 1 0 1 0 0 2h1.735a5 5 0 0 0 4.288-2.428l3.67-6.115A3 3 0 0 1 15.264 8h3.32l-1.292 1.293a1 1 0 0 0 1.414 1.414l3-3A1 1 0 0 0 22 7m-.076-.383a1 1 0 0 1 .076.38z" />
+                                                <path
+                                                    d="m21.706 17.708l-2.999 3a1 1 0 0 1-1.414-1.415L18.586 18h-3.321a5 5 0 0 1-4.288-2.428l-3.67-6.115A3 3 0 0 0 4.736 8H3a1 1 0 0 1 0-2h1.735a5 5 0 0 1 4.288 2.428l3.67 6.115A3 3 0 0 0 15.264 16h3.32l-1.292-1.293a1 1 0 0 1 1.414-1.414l3 3c.195.194.292.45.293.704V17a1 1 0 0 1-.294.708z" />
+                                            </g>
+                                        </svg>
+                                        <svg class="prev-btn cursor-pointer" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <div
+                                            class="play-section text-zinc-950 w-[50px] h-[50px] bg-zinc-50 rounded-full flex items-center justify-center">
+                                            <button class="play-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4" />
+                                                </svg></button>
+                                        </div>
+                                        <svg class="next-btn cursor-pointer rotate-180"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-width="1.5">
+                                                <path stroke-linejoin="round"
+                                                    d="M21 9V4l-2 1m-4 2H7M5 19l-2-2m0 0l2-2m-2 2h14" />
+                                                <path d="M3 11a4 4 0 0 1 4-4m14 6a4 4 0 0 1-4 4" />
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -744,9 +816,71 @@
 
                                 </div>
 
-                                <div class="text-center text-zinc-50 mt-5">
-                                    <h1 class="font-bold text-4xl lexend-deca">MEMORENCE</h1>
-                                    <p class="text-zinc-300 birthstone-regular text-3xl">Photobooth Versi 1.2</p>
+                                <!-- audio spotify -->
+                                <div class="audio-player player">
+                                    <div class="w-full max-w-md mx-auto mt-10 text-white">
+                                        <audio class="audio" src="./song/about_you-the1945.mp3"></audio>
+                                        <!-- Info Lagu -->
+                                        <div class="flex justify-between items-center text-zinc-50 mb-2">
+                                            <div>
+                                                <h1 class="judul text-2xl font-bold">About You</h1>
+                                                <p class="penyanyi text-zinc-300">The 1975</p>
+                                            </div>
+                                            <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M14.75 1A5.24 5.24 0 0 0 10 4A5.24 5.24 0 0 0 0 6.25C0 11.75 10 19 10 19s10-7.25 10-12.75A5.25 5.25 0 0 0 14.75 1" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <!-- Progress Bar t 2-->
+                                    <div class="timeline">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="time-section text-zinc-50">
+                                        <span class="current">0:00</span> / <span class="duration">0:00</span>
+                                    </div>
+                                    <!-- tombol -->
+                                    <div
+                                        class="text-center px-[10%] audio-controls text-zinc-50 mt-5 flex justify-around items-center ">
+                                        <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M21.924 6.617a1 1 0 0 0-.217-.324l-3-3a1 1 0 1 0-1.414 1.414L18.586 6h-3.321a5 5 0 0 0-4.288 2.428l-3.67 6.115A3 3 0 0 1 4.736 16H3a1 1 0 1 0 0 2h1.735a5 5 0 0 0 4.288-2.428l3.67-6.115A3 3 0 0 1 15.264 8h3.32l-1.292 1.293a1 1 0 0 0 1.414 1.414l3-3A1 1 0 0 0 22 7m-.076-.383a1 1 0 0 1 .076.38z" />
+                                                <path
+                                                    d="m21.706 17.708l-2.999 3a1 1 0 0 1-1.414-1.415L18.586 18h-3.321a5 5 0 0 1-4.288-2.428l-3.67-6.115A3 3 0 0 0 4.736 8H3a1 1 0 0 1 0-2h1.735a5 5 0 0 1 4.288 2.428l3.67 6.115A3 3 0 0 0 15.264 16h3.32l-1.292-1.293a1 1 0 0 1 1.414-1.414l3 3c.195.194.292.45.293.704V17a1 1 0 0 1-.294.708z" />
+                                            </g>
+                                        </svg>
+                                        <svg class="prev-btn cursor-pointer" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <div
+                                            class="play-section text-zinc-950 w-[50px] h-[50px] bg-zinc-50 rounded-full flex items-center justify-center">
+                                            <button class="play-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4" />
+                                                </svg></button>
+                                        </div>
+                                        <svg class="next-btn cursor-pointer rotate-180"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-width="1.5">
+                                                <path stroke-linejoin="round"
+                                                    d="M21 9V4l-2 1m-4 2H7M5 19l-2-2m0 0l2-2m-2 2h14" />
+                                                <path d="M3 11a4 4 0 0 1 4-4m14 6a4 4 0 0 1-4 4" />
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -787,11 +921,71 @@
                                             class="upload-btn hidden no-capture absolute bottom-2 right-2 bg-green-500 text-white px-2 py-1 rounded cursor-pointer" />
                                     </div>
                                 </div>
-                                <div class="text-center text-zinc-50 mt-5">
-                                    <h1 class="  font-bold text-4xl lexend-deca">MEMORENCE</h1>
-                                    <p class=" text-zinc-300 birthstone-regular text-3xl"> Photobooth Memorence Versi
-                                        1.2
-                                    </p>
+                                <!-- audio spotify -->
+                                <div class="audio-player player">
+                                    <div class="w-full max-w-md mx-auto mt-10 text-white">
+                                        <audio class="audio" src="./song/about_you-the1945.mp3"></audio>
+                                        <!-- Info Lagu -->
+                                        <div class="flex justify-between items-center text-zinc-50 mb-2">
+                                            <div>
+                                                <h1 class="judul text-2xl font-bold">About You</h1>
+                                                <p class="penyanyi text-zinc-300">The 1975</p>
+                                            </div>
+                                            <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                height="20" fill="currentColor" viewBox="0 0 20 20">
+                                                <path
+                                                    d="M14.75 1A5.24 5.24 0 0 0 10 4A5.24 5.24 0 0 0 0 6.25C0 11.75 10 19 10 19s10-7.25 10-12.75A5.25 5.25 0 0 0 14.75 1" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <!-- Progress Bar t 2-->
+                                    <div class="timeline">
+                                        <div class="progress"></div>
+                                    </div>
+                                    <div class="time-section text-zinc-50">
+                                        <span class="current">0:00</span> / <span class="duration">0:00</span>
+                                    </div>
+                                    <!-- tombol -->
+                                    <div
+                                        class="text-center px-[10%] audio-controls text-zinc-50 mt-5 flex justify-around items-center ">
+                                        <svg class="text-green-500" xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24">
+                                            <g fill="currentColor">
+                                                <path
+                                                    d="M21.924 6.617a1 1 0 0 0-.217-.324l-3-3a1 1 0 1 0-1.414 1.414L18.586 6h-3.321a5 5 0 0 0-4.288 2.428l-3.67 6.115A3 3 0 0 1 4.736 16H3a1 1 0 1 0 0 2h1.735a5 5 0 0 0 4.288-2.428l3.67-6.115A3 3 0 0 1 15.264 8h3.32l-1.292 1.293a1 1 0 0 0 1.414 1.414l3-3A1 1 0 0 0 22 7m-.076-.383a1 1 0 0 1 .076.38z" />
+                                                <path
+                                                    d="m21.706 17.708l-2.999 3a1 1 0 0 1-1.414-1.415L18.586 18h-3.321a5 5 0 0 1-4.288-2.428l-3.67-6.115A3 3 0 0 0 4.736 8H3a1 1 0 0 1 0-2h1.735a5 5 0 0 1 4.288 2.428l3.67 6.115A3 3 0 0 0 15.264 16h3.32l-1.292-1.293a1 1 0 0 1 1.414-1.414l3 3c.195.194.292.45.293.704V17a1 1 0 0 1-.294.708z" />
+                                            </g>
+                                        </svg>
+                                        <svg class="prev-btn cursor-pointer" xmlns="http://www.w3.org/2000/svg"
+                                            width="24" height="24" viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <div
+                                            class="play-section text-zinc-950 w-[50px] h-[50px] bg-zinc-50 rounded-full flex items-center justify-center">
+                                            <button class="play-btn"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                    height="24" viewBox="0 0 24 24">
+                                                    <path fill="currentColor"
+                                                        d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4" />
+                                                </svg></button>
+                                        </div>
+                                        <svg class="next-btn cursor-pointer rotate-180"
+                                            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                d="M112 64a16 16 0 0 1 16 16v136.43L360.77 77.11a35.13 35.13 0 0 1 35.77-.44c12 6.8 19.46 20 19.46 34.33v290c0 14.37-7.46 27.53-19.46 34.33a35.14 35.14 0 0 1-35.77-.45L128 295.57V432a16 16 0 0 1-32 0V80a16 16 0 0 1 16-16" />
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" stroke="currentColor" stroke-linecap="round"
+                                                stroke-width="1.5">
+                                                <path stroke-linejoin="round"
+                                                    d="M21 9V4l-2 1m-4 2H7M5 19l-2-2m0 0l2-2m-2 2h14" />
+                                                <path d="M3 11a4 4 0 0 1 4-4m14 6a4 4 0 0 1-4 4" />
+                                            </g>
+                                        </svg>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -818,6 +1012,18 @@
 
     </div>
 
+
+    <div class="px-[15%] ">
+        <div class="md:flex justify-between items-center">
+            <h1 class=" text-zinc-50 text-4xl font-bold">List Lagu Yang Tersedia</h1>
+            <input class=" rounded-xl bg-zinc-100 dark:bg-zinc-100 dark:text-zinc-900 px-5 py-2 w-full mt-10 md:w-[300px] " type="text" id="search-input" placeholder="Cari lagu..."
+                
+             />
+        </div>
+        <ul id="daftar-lagu" class="lagu-list mt-10 "></ul>
+    </div>
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="./script.js"></script>
 
@@ -834,119 +1040,221 @@
                     loadingScreen.style.display = 'none';
                     mainContent.style.display = 'block';
                 }
-            }, 5000); 
+            }, 5000);
         });
 
 
 
         // song
-        const audio = document.getElementById("audio");
-        const playBtn = document.getElementById("play-btn");
-        const progress = document.querySelector(".progress");
-        const timeline = document.querySelector(".timeline");
-        const currentTimeEl = document.getElementById("current");
-        const durationEl = document.getElementById("duration");
-        const volumeSlider = document.querySelector(".volume-slider");
-        const volumeFill = document.querySelector(".volume-fill");
+        // === AUDIO PLAYER DINAMIS BERDASARKAN TEMPLATE ===
+        // === AUDIO PLAYER GLOBAL UNTUK SEMUA TEMPLATE ===
+        // Ambil elemen
 
-        const judulEl = document.getElementById("judul");
-        const penyanyiEl = document.getElementById("penyanyi");
-        const nextBtn = document.getElementById("next-btn");
-        const prevBtn = document.getElementById("prev-btn");
+
+        const players = document.querySelectorAll(".player");
 
         const laguList = [
-            { judul: "About You", penyanyi: "The 1975", file: "./src/about_you-the1945.mp3" },
-            { judul: "Janji Setia", penyanyi: "Tiara Andini", file: "./src/Janji_Setia-Tiara_Andini.mp3" },
-            // { judul: "Yellow", penyanyi: "Coldplay", file: "./src/Coldplay - Yellow.mp3" }
+            {
+                judul: "Aku Yang Jatuh Cinta",
+                penyanyi: "Dudy Oris",
+                file: "./song/Dudy Oris - Aku Yang Jatuh Cinta (Official Lyric Video).mp3"
+            },
+            {
+                judul: "Where You Are",
+                penyanyi: "Keenan Te",
+                file: "./song/Keenan Te - Where You Are (Official Lyric Video).mp3"
+            },
+            {
+                judul: "Rahasia Hati",
+                penyanyi: "NIDJI",
+                file: "./song/Rahasia Hati - NIDJI LIRIK.mp3"
+            },
+            {
+                judul: "Where We Are  ",
+                penyanyi: "One Direction",
+                file: "./song/Where We Are - One Direction Lyrics Tiktok Version.mp3"
+            },
+            {
+                judul: "Somebody's Pleasure",
+                penyanyi: "Aziz Hedra",
+                file: "./song/Aziz Hedra - Somebody's Pleasure (Official Music Video).mp3"
+            },
+            {
+                judul: "A Thousand Years",
+                penyanyi: "Christina Perri",
+                file: "./song/Christina Perri - A Thousand Years [Official Music Video].mp3"
+            },
+            {
+                judul: "We Can't Be Friends  ",
+                penyanyi: "Ariana Grande",
+                file: "./song/Ariana Grande - we can't be friends (wait for your love) (official music video).mp3"
+            },
+            {
+                judul: "Sampai Akhir Waktu",
+                penyanyi: "Yovie & Nuno",
+                file: "./song/(OFFICIAL AUDIO) Yovie & Nuno - Sampai Akhir Waktu.mp3"
+            },
+            {
+                judul: "Rahasia Hati",
+                penyanyi: "NIDJI",
+                file: "./song/Rahasia Hati - NIDJI LIRIK.mp3"
+            },
+            {
+                judul: "Where You Are",
+                penyanyi: "Keenan Te",
+                file: "./song/Keenan Te - Where You Are (Official Lyric Video).mp3"
+            }
         ];
 
-        let laguIndex = 0;
+        function formatTime(time) {
+            if (isNaN(time)) return "0:00";
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        }
 
-        function loadLagu(index) {
+        function playAudio(player, audio, playBtn) {
+            players.forEach(p => {
+                const otherAudio = p.querySelector(".audio");
+                const otherPlayBtn = p.querySelector(".play-btn");
+                if (otherAudio !== audio) {
+                    otherAudio.pause();
+                    otherPlayBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" stroke="currentColor" stroke-dasharray="40" stroke-dashoffset="40" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6l10 6l-10 6Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.5s" dur="0.5s" values="0;1"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="40;0"/></path></svg>`; // ikon play biasa
+                }
+            });
+
+            audio.play();
+            playBtn.innerHTML = `   <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-dasharray="32" stroke-dashoffset="32" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M7 6h2v12h-2Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="32;0"/></path><path d="M15 6h2v12h-2Z"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="32;0"/></path></g></svg>`; // ikon pause biasa
+        }
+
+        function pauseAudio(audio, playBtn) {
+            audio.pause();
+            playBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" fill-opacity="0" stroke="currentColor" stroke-dasharray="40" stroke-dashoffset="40" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 6l10 6l-10 6Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.5s" dur="0.5s" values="0;1"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="40;0"/></path></svg>`;
+        }
+
+        function loadLagu(index, player) {
+            const audio = player.querySelector(".audio");
+            const judulEl = player.querySelector(".judul");
+            const penyanyiEl = player.querySelector(".penyanyi");
+            const playBtn = player.querySelector(".play-btn");
+
             const lagu = laguList[index];
+            if (!lagu) return;
+
             audio.src = lagu.file;
             judulEl.textContent = lagu.judul;
             penyanyiEl.textContent = lagu.penyanyi;
             audio.load();
-            playAudio(); // auto play saat next/prev
+            playAudio(player, audio, playBtn);
         }
 
-        function playAudio() {
-            audio.play();
-            playBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                <path fill="currentColor" d="M14 19V5h4v14zm-8 0V5h4v14z"/>
-            </svg>`;
-        }
+        players.forEach(player => {
+            let currentIndex = 0;
 
-        function pauseAudio() {
-            audio.pause();
-            playBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
-                <path fill="currentColor" d="M6 4v16a1 1 0 0 0 1.524.852l13-8a1 1 0 0 0 0-1.704l-13-8A1 1 0 0 0 6 4"/>
-            </svg>`;
-        }
+            const audio = player.querySelector(".audio");
+            const progress = player.querySelector(".progress");
+            const timeline = player.querySelector(".timeline");
+            const currentTimeEl = player.querySelector(".current");
+            const durationEl = player.querySelector(".duration");
+            const playBtn = player.querySelector(".play-btn");
+            const nextBtn = player.querySelector(".next-btn");
+            const prevBtn = player.querySelector(".prev-btn");
 
-        playBtn.addEventListener("click", () => {
-            if (audio.paused) {
-                playAudio();
-            } else {
-                pauseAudio();
-            }
+            playBtn.addEventListener("click", () => {
+                if (audio.paused) {
+                    playAudio(player, audio, playBtn);
+                } else {
+                    pauseAudio(audio, playBtn);
+                }
+            });
+
+            nextBtn.addEventListener("click", () => {
+                currentIndex++;
+                if (currentIndex >= laguList.length) currentIndex = 0;
+                loadLagu(currentIndex, player);
+            });
+
+            prevBtn.addEventListener("click", () => {
+                currentIndex--;
+                if (currentIndex < 0) currentIndex = laguList.length - 1;
+                loadLagu(currentIndex, player);
+            });
+
+            audio.addEventListener("timeupdate", () => {
+                const current = audio.currentTime;
+                const duration = audio.duration;
+                const progressPercent = (current / duration) * 100;
+                progress.style.width = progressPercent + "%";
+                currentTimeEl.textContent = formatTime(current);
+                durationEl.textContent = formatTime(duration);
+            });
+
+            timeline.addEventListener("click", (e) => {
+                const rect = timeline.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const duration = audio.duration;
+                if (!isNaN(duration)) {
+                    const newTime = (clickX / rect.width) * duration;
+                    audio.currentTime = newTime;
+                }
+            });
+
+            // Load lagu pertama
+            loadLagu(currentIndex, player);
         });
 
-        nextBtn.addEventListener("click", () => {
-            laguIndex = (laguIndex + 1) % laguList.length;
-            loadLagu(laguIndex);
+        // Menampilkan daftar lagu
+        const daftarLaguEl = document.getElementById("daftar-lagu");
+        laguList.forEach((lagu, index) => {
+            const item = document.createElement("li");
+            item.innerHTML = `<strong>${index + 1}. ${lagu.judul}</strong> - ${lagu.penyanyi}`;
+            item.style.cursor = "pointer";
+            item.style.padding = "10px";
+
+            // Saat diklik, load lagu ke player pertama
+            item.addEventListener("click", () => {
+                const player = players[0]; // jika hanya ada 1 player utama
+                loadLagu(index, player);
+            });
+
+            daftarLaguEl.appendChild(item);
         });
 
-        prevBtn.addEventListener("click", () => {
-            laguIndex = (laguIndex - 1 + laguList.length) % laguList.length;
-            loadLagu(laguIndex);
-        });
+        const searchInput = document.getElementById("search-input");
 
-        audio.addEventListener("loadedmetadata", () => {
-            durationEl.textContent = formatTime(audio.duration);
-            audio.volume = 0.75;
-            if (volumeFill) volumeFill.style.width = "75%";
-        });
+        function renderLaguList(filteredList = laguList) {
+            daftarLaguEl.innerHTML = ""; // Kosongkan dulu
+            filteredList.forEach((lagu, index) => {
+                const item = document.createElement("li");
+                item.innerHTML = `<strong>${index + 1}. ${lagu.judul}</strong> - ${lagu.penyanyi}`;
+                item.style.cursor = "pointer";
+                item.style.padding = "10px";
 
-        audio.addEventListener("timeupdate", () => {
-            const percent = (audio.currentTime / audio.duration) * 100;
-            progress.style.width = `${percent}%`;
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        });
+                item.addEventListener("click", () => {
+                    const player = players[0]; // Player utama
+                    loadLagu(index, player);
+                });
 
-        timeline.addEventListener("click", (e) => {
-            const width = timeline.clientWidth;
-            const clickX = e.offsetX;
-            const duration = audio.duration;
-            audio.currentTime = (clickX / width) * duration;
-        });
-
-        if (volumeSlider) {
-            volumeSlider.addEventListener("click", (e) => {
-                const width = volumeSlider.offsetWidth;
-                const clickX = e.offsetX;
-                const volume = clickX / width;
-                audio.volume = volume;
-                if (volumeFill) volumeFill.style.width = `${volume * 100}%`;
+                daftarLaguEl.appendChild(item);
             });
         }
 
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
-            return `${minutes}:${secs}`;
-        }
+        // Pertama kali tampilkan semua
+        renderLaguList();
 
-        // Muat lagu pertama
-        loadLagu(laguIndex);
+        // Saat mengetik di kolom pencarian
+        searchInput.addEventListener("input", () => {
+            const keyword = searchInput.value.toLowerCase();
+            const filtered = laguList.filter(lagu =>
+                lagu.judul.toLowerCase().includes(keyword) ||
+                lagu.penyanyi.toLowerCase().includes(keyword)
+            );
+            renderLaguList(filtered);
+        });
 
 
-    </script>
-
-    //
     </script>
     <!-- buiar ultra hd -->
 

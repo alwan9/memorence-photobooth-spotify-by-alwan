@@ -414,31 +414,52 @@ ul {
 /*  */
 /* text animasi */
 .text-focus-in {
-	-webkit-animation: text-focus-in 1.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-	        animation: text-focus-in 1.4s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  -webkit-animation: text-focus-in 1.4s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    both;
+  animation: text-focus-in 1.4s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
- 
+
 @-webkit-keyframes text-focus-in {
   0% {
     -webkit-filter: blur(12px);
-            filter: blur(12px);
+    filter: blur(12px);
     opacity: 0;
   }
   100% {
     -webkit-filter: blur(0px);
-            filter: blur(0px);
+    filter: blur(0px);
     opacity: 1;
   }
 }
 @keyframes text-focus-in {
   0% {
     -webkit-filter: blur(12px);
-            filter: blur(12px);
+    filter: blur(12px);
     opacity: 0;
   }
   100% {
     -webkit-filter: blur(0px);
-            filter: blur(0px);
+    filter: blur(0px);
     opacity: 1;
   }
+}
+
+/* listt lagu style */
+.lagu-list {
+ 
+  color: white;
+  list-style-type: none;
+  padding: 0;
+  margin: 50px 0px;
+  font-family: sans-serif;
+}
+
+.lagu-list li {
+  padding: 10px;
+  border-bottom: 1px solid #2b2b2b;
+  cursor: pointer;
+}
+
+.lagu-list li:hover {
+  background-color: #272727;
 }
