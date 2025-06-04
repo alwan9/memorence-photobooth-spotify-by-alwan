@@ -293,24 +293,22 @@ function downloadSelectedTemplate() {
     const canvases = selectedTemplate.querySelectorAll("canvas");
     const originalCanvasStyles = [];
 
-    canvases.forEach((canvas, i) => {
-        originalCanvasStyles[i] = {
-            width: canvas.style.width,
-            height: canvas.style.height,
-            maxWidth: canvas.style.maxWidth
-        };
+  canvases.forEach((canvas, i) => {
+    originalCanvasStyles[i] = {
+        width: canvas.style.width,
+        height: canvas.style.height,
+        maxWidth: canvas.style.maxWidth
+    };
 
-        // ✅ Gunakan ukuran proporsional (bukan paksa pixel penuh)
-        // ladscape
-        canvas.style.width = "100%";
-        canvas.style.height = "auto";
+    // Hanya ubah ukuran jika template bukan 2 atau 4
+    if (selectedTemplateId !== "template2" && selectedTemplateId !== "template4") {
+        canvas.style.width = "512px";
+        canvas.style.height = "300px";
         canvas.style.maxWidth = "600px";
-        // potreit
-        // canvas.style.width = "100%";
-        // canvas.style.height = "400px";
-        // canvas.style.maxWidth = "100%"; 
+    }
+});
 
-    });
+    
 
     html2canvas(selectedTemplate, {
         backgroundColor: null,
