@@ -802,6 +802,10 @@ video {
   height: 50px;
 }
 
+.h-\[66px\] {
+  height: 66px;
+}
+
 .h-full {
   height: 100%;
 }
@@ -832,6 +836,10 @@ video {
 
 .w-\[50px\] {
   width: 50px;
+}
+
+.w-\[66px\] {
+  width: 66px;
 }
 
 .w-full {
