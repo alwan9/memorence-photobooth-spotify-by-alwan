@@ -99,19 +99,68 @@ document.addEventListener("DOMContentLoaded", () => {
     startCamera();
 });
 
-async function loadCameraDevices() {
+function toggleDslrHelp() {
+    const modal = document.getElementById("dslrHelpModal");
+    if (modal) {
+        modal.classList.toggle("hidden");
+    }
+}
+
+async function refreshCameras() {
+    const scanBtn = document.getElementById("scanCameraBtn");
+    const statusEl = document.getElementById("cameraStatus");
+    if (scanBtn) {
+        scanBtn.disabled = true;
+        scanBtn.classList.add("opacity-50");
+    }
+    if (statusEl) {
+        statusEl.innerText = "Memindai ulang perangkat kamera...";
+    }
+
+    await loadCameraDevices(true);
+
+    if (scanBtn) {
+        scanBtn.disabled = false;
+        scanBtn.classList.remove("opacity-50");
+    }
+}
+
+async function loadCameraDevices(forceRequest = false) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
         console.warn("enumerateDevices tidak didukung pada browser ini.");
         return;
     }
 
     try {
+        if (forceRequest) {
+            // Minta akses kamera secara umum untuk memastikan permission UVC/USB terbuka di browser
+            try {
+                const tempStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: { ideal: "external" } }
+                });
+                if (currentStream) {
+                    currentStream.getTracks().forEach(t => t.stop());
+                }
+                currentStream = tempStream;
+                video.srcObject = tempStream;
+                await video.play().catch(e => console.log("Video play:", e));
+            } catch (err) {
+                console.log("Percobaan buka external camera saat scan:", err);
+            }
+        }
+
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter(device => device.kind === "videoinput");
 
         if (cameraSelect) {
             const previousSelected = cameraSelect.value;
             cameraSelect.innerHTML = "";
+
+            // Opsi khusus deteksi paksa eksternal
+            const extOpt = document.createElement("option");
+            extOpt.value = "__external__";
+            extOpt.text = "🔌 Hubungkan Kamera Eksternal (OTG / USB / DSLR)";
+            cameraSelect.appendChild(extOpt);
 
             if (videoDevices.length === 0) {
                 const opt = document.createElement("option");
@@ -121,16 +170,42 @@ async function loadCameraDevices() {
                 return;
             }
 
+            let externalFound = false;
+
             videoDevices.forEach((device, index) => {
                 const opt = document.createElement("option");
                 opt.value = device.deviceId;
-                let label = device.label || `Kamera ${index + 1}`;
-                opt.text = label;
+
+                let rawLabel = (device.label || "").toLowerCase();
+                let displayLabel = device.label;
+
+                if (rawLabel.includes("external") || rawLabel.includes("usb") || rawLabel.includes("uvc") || rawLabel.includes("capture") || rawLabel.includes("cam link") || rawLabel.includes("hdmi")) {
+                    displayLabel = `⭐ DSLR / Eksternal: ${device.label || "USB Video"}`;
+                    externalFound = true;
+                } else if (rawLabel.includes("front") || rawLabel.includes("depan")) {
+                    displayLabel = `📱 Kamera Depan HP (${device.label})`;
+                } else if (rawLabel.includes("back") || rawLabel.includes("belakang") || rawLabel.includes("0, facing back")) {
+                    displayLabel = `📱 Kamera Belakang HP (${device.label})`;
+                } else if (!displayLabel) {
+                    displayLabel = `Kamera ${index + 1} (Klik untuk Mencoba)`;
+                }
+
+                opt.text = displayLabel;
                 cameraSelect.appendChild(opt);
             });
 
+            // Status info kamera
+            const cameraStatusEl = document.getElementById("cameraStatus");
+            if (cameraStatusEl) {
+                if (externalFound) {
+                    cameraStatusEl.innerText = `✅ Kamera Eksternal / DSLR terdeteksi! (${videoDevices.length} kamera total)`;
+                } else {
+                    cameraStatusEl.innerText = `${videoDevices.length} kamera HP terdeteksi. Colokkan kabel lalu klik Scan.`;
+                }
+            }
+
             // Pertahankan pilihan jika masih ada di daftar perangkat
-            if (previousSelected && videoDevices.some(d => d.deviceId === previousSelected)) {
+            if (previousSelected && (previousSelected === "__external__" || videoDevices.some(d => d.deviceId === previousSelected))) {
                 cameraSelect.value = previousSelected;
             } else if (currentStream) {
                 const videoTrack = currentStream.getVideoTracks()[0];
@@ -159,20 +234,34 @@ async function startCamera(deviceId = null) {
         video.srcObject = null;
     }
 
-    const targetDeviceId = deviceId || (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
+    const targetDeviceId = deviceId !== null ? deviceId : (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
 
-    const constraints = {
-        video: targetDeviceId
-            ? {
+    let constraints = {};
+
+    if (targetDeviceId === "__external__") {
+        constraints = {
+            video: {
+                facingMode: { ideal: "external" },
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            }
+        };
+    } else if (targetDeviceId) {
+        constraints = {
+            video: {
                 deviceId: { exact: targetDeviceId },
                 width: { ideal: 1920 },
                 height: { ideal: 1080 }
             }
-            : {
+        };
+    } else {
+        constraints = {
+            video: {
                 width: { ideal: 1920 },
                 height: { ideal: 1080 }
             }
-    };
+        };
+    }
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -183,9 +272,14 @@ async function startCamera(deviceId = null) {
     } catch (error) {
         console.warn("Gagal membuka kamera dengan constraint ideal, mencoba fallback:", error);
         try {
-            const fallbackConstraints = targetDeviceId
-                ? { video: { deviceId: targetDeviceId } }
-                : { video: true };
+            let fallbackConstraints;
+            if (targetDeviceId === "__external__") {
+                fallbackConstraints = { video: { facingMode: "external" } };
+            } else if (targetDeviceId) {
+                fallbackConstraints = { video: { deviceId: targetDeviceId } };
+            } else {
+                fallbackConstraints = { video: true };
+            }
             const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
             currentStream = stream;
             video.srcObject = stream;
@@ -193,9 +287,78 @@ async function startCamera(deviceId = null) {
             await loadCameraDevices();
         } catch (err) {
             console.error("Gagal total mengakses kamera:", err);
-            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser.");
+            if (targetDeviceId) {
+                try {
+                    const fallbackDefault = await navigator.mediaDevices.getUserMedia({ video: true });
+                    currentStream = fallbackDefault;
+                    video.srcObject = fallbackDefault;
+                    await video.play().catch(e => console.log("Video fallback default:", e));
+                    await loadCameraDevices();
+                    return;
+                } catch (e2) {}
+            }
+            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser dan koneksi OTG aktif.");
         }
     }
+}
+
+// Upload foto langsung dari DSLR (kabel OTG / file manager / galeri)
+function handleDSLRPhotoUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    if (photoCount >= 8) {
+        alert("Semua slot foto sudah terisi!");
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            let canvas = canvasList[photoCount];
+            let context = canvas.getContext("2d");
+
+            // Set resolusi UHD/2K tetap
+            canvas.width = 2560;
+            canvas.height = 1440;
+
+            drawImageWithCoverStyle(img, context, canvas);
+
+            retakeButtons[photoCount].classList.remove("hidden");
+            photoTaken[photoCount] = true;
+            photoCount++;
+
+            if (photoTaken.every(taken => taken)) {
+                document.getElementById("downloadAll").classList.remove("hidden");
+                document.getElementById("downloadMerged").classList.remove("hidden");
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    event.target.value = "";
+}
+
+function drawImageWithCoverStyle(img, context, canvas) {
+    const canvasAspect = canvas.width / canvas.height;
+    const imgAspect = img.width / img.height;
+
+    let sx, sy, sWidth, sHeight;
+
+    if (imgAspect > canvasAspect) {
+        sHeight = img.height;
+        sWidth = sHeight * canvasAspect;
+        sx = (img.width - sWidth) / 2;
+        sy = 0;
+    } else {
+        sWidth = img.width;
+        sHeight = sWidth / canvasAspect;
+        sx = 0;
+        sy = (img.height - sHeight) / 2;
+    }
+
+    // Foto DSLR tidak perlu di-mirror
+    context.drawImage(img, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 }
 
 if (cameraSelect) {
