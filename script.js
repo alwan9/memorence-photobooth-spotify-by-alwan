@@ -106,6 +106,24 @@ function toggleDslrHelp() {
     }
 }
 
+function safePlayVideo(el) {
+    if (!el) return;
+    try {
+        const p = el.play();
+        if (p !== undefined && typeof p.catch === "function") {
+            p.catch(err => {
+                if (err.name !== "AbortError") {
+                    console.warn("Video play error:", err);
+                }
+            });
+        }
+    } catch (e) {
+        if (e.name !== "AbortError") {
+            console.warn("Video play sync error:", e);
+        }
+    }
+}
+
 async function refreshCameras() {
     const scanBtn = document.getElementById("scanCameraBtn");
     const statusEl = document.getElementById("cameraStatus");
@@ -143,7 +161,7 @@ async function loadCameraDevices(forceRequest = false) {
                 }
                 currentStream = tempStream;
                 video.srcObject = tempStream;
-                await video.play().catch(e => console.log("Video play:", e));
+                safePlayVideo(video);
             } catch (err) {
                 console.log("Percobaan buka external camera saat scan:", err);
             }
@@ -267,7 +285,7 @@ async function startCamera(deviceId = null) {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         currentStream = stream;
         video.srcObject = stream;
-        await video.play().catch(e => console.log("Video play error:", e));
+        safePlayVideo(video);
         await loadCameraDevices();
     } catch (error) {
         console.warn("Gagal membuka kamera dengan constraint ideal, mencoba fallback:", error);
@@ -283,7 +301,7 @@ async function startCamera(deviceId = null) {
             const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
             currentStream = stream;
             video.srcObject = stream;
-            await video.play().catch(e => console.log("Video fallback play error:", e));
+            safePlayVideo(video);
             await loadCameraDevices();
         } catch (err) {
             console.error("Gagal total mengakses kamera:", err);
@@ -292,7 +310,7 @@ async function startCamera(deviceId = null) {
                     const fallbackDefault = await navigator.mediaDevices.getUserMedia({ video: true });
                     currentStream = fallbackDefault;
                     video.srcObject = fallbackDefault;
-                    await video.play().catch(e => console.log("Video fallback default:", e));
+                    safePlayVideo(video);
                     await loadCameraDevices();
                     return;
                 } catch (e2) {}
@@ -807,10 +825,9 @@ function toggleDarkMode() {
     document.documentElement.classList.toggle('dark');
 }
 
-uploadToCanvasById(event, 'canvas3_only')
-
 //   fungsi uploadToCanvasById 
 function uploadToCanvasById(event, canvasId) {
+    if (!event || !event.target || !event.target.files) return;
     const file = event.target.files[0];
     if (!file) return;
 

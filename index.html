@@ -1185,7 +1185,14 @@
                 }
             });
 
-            audio.play();
+            const playPromise = audio.play();
+            if (playPromise !== undefined && typeof playPromise.catch === "function") {
+                playPromise.catch(error => {
+                    if (error.name !== "AbortError") {
+                        console.warn("Audio play error:", error);
+                    }
+                });
+            }
             playBtn.innerHTML = `   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-dasharray="32" stroke-dashoffset="32" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M7 6h2v12h-2Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="32;0"/></path><path d="M15 6h2v12h-2Z"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.4s" dur="0.4s" values="32;0"/></path></g></svg>`; // ikon pause biasa
         }
 
