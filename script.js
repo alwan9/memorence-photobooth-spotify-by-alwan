@@ -4,6 +4,8 @@ document.documentElement.classList.add("dark");
 let video = document.getElementById("video");
 let timerDisplay = document.getElementById("timer");
 const timeSelect = document.getElementById("timeSelect");
+const cameraSelect = document.getElementById("cameraSelect");
+let currentStream = null;
 let countdown; // supaya bisa clearInterval kalau pilih baru
 let selectedTime = 1; // default 1 detik, seperti awal
 
@@ -97,16 +99,118 @@ document.addEventListener("DOMContentLoaded", () => {
     startCamera();
 });
 
+async function loadCameraDevices() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+        console.warn("enumerateDevices tidak didukung pada browser ini.");
+        return;
+    }
 
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(device => device.kind === "videoinput");
 
-function startCamera() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then((stream) => {
+        if (cameraSelect) {
+            const previousSelected = cameraSelect.value;
+            cameraSelect.innerHTML = "";
+
+            if (videoDevices.length === 0) {
+                const opt = document.createElement("option");
+                opt.value = "";
+                opt.text = "Tidak ada kamera terdeteksi";
+                cameraSelect.appendChild(opt);
+                return;
+            }
+
+            videoDevices.forEach((device, index) => {
+                const opt = document.createElement("option");
+                opt.value = device.deviceId;
+                let label = device.label || `Kamera ${index + 1}`;
+                opt.text = label;
+                cameraSelect.appendChild(opt);
+            });
+
+            // Pertahankan pilihan jika masih ada di daftar perangkat
+            if (previousSelected && videoDevices.some(d => d.deviceId === previousSelected)) {
+                cameraSelect.value = previousSelected;
+            } else if (currentStream) {
+                const videoTrack = currentStream.getVideoTracks()[0];
+                if (videoTrack && videoTrack.getSettings) {
+                    const settings = videoTrack.getSettings();
+                    if (settings && settings.deviceId) {
+                        cameraSelect.value = settings.deviceId;
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error("Gagal mendapatkan daftar kamera:", error);
+    }
+}
+
+async function startCamera(deviceId = null) {
+    // Hentikan stream kamera sebelumnya jika ada
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        currentStream = null;
+    }
+    if (video.srcObject) {
+        const tracks = video.srcObject.getTracks ? video.srcObject.getTracks() : [];
+        tracks.forEach(track => track.stop());
+        video.srcObject = null;
+    }
+
+    const targetDeviceId = deviceId || (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
+
+    const constraints = {
+        video: targetDeviceId
+            ? {
+                deviceId: { exact: targetDeviceId },
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            }
+            : {
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            }
+    };
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        currentStream = stream;
+        video.srcObject = stream;
+        await video.play().catch(e => console.log("Video play error:", e));
+        await loadCameraDevices();
+    } catch (error) {
+        console.warn("Gagal membuka kamera dengan constraint ideal, mencoba fallback:", error);
+        try {
+            const fallbackConstraints = targetDeviceId
+                ? { video: { deviceId: targetDeviceId } }
+                : { video: true };
+            const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+            currentStream = stream;
             video.srcObject = stream;
-        })
-        .catch((error) => {
-            console.error("Gagal mengakses kamera:", error);
-        });
+            await video.play().catch(e => console.log("Video fallback play error:", e));
+            await loadCameraDevices();
+        } catch (err) {
+            console.error("Gagal total mengakses kamera:", err);
+            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser.");
+        }
+    }
+}
+
+if (cameraSelect) {
+    cameraSelect.addEventListener("change", function () {
+        if (this.value) {
+            startCamera(this.value);
+        }
+    });
+}
+
+// Perbarui daftar saat ada perangkat kamera baru dicolokkan (misal DSLR via capture card / USB OTG)
+if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+    navigator.mediaDevices.addEventListener("devicechange", () => {
+        loadCameraDevices();
+    });
 }
 
 
