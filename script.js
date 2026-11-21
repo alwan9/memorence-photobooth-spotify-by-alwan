@@ -159,7 +159,7 @@ async function loadCameraDevices(forceRequest = false) {
             // Opsi khusus deteksi paksa eksternal
             const extOpt = document.createElement("option");
             extOpt.value = "__external__";
-            extOpt.text = "🔌 Hubungkan Kamera Eksternal (OTG / USB / DSLR)";
+            extOpt.text = "[Eksternal] Hubungkan Kamera (OTG / USB / DSLR)";
             cameraSelect.appendChild(extOpt);
 
             if (videoDevices.length === 0) {
@@ -180,12 +180,12 @@ async function loadCameraDevices(forceRequest = false) {
                 let displayLabel = device.label;
 
                 if (rawLabel.includes("external") || rawLabel.includes("usb") || rawLabel.includes("uvc") || rawLabel.includes("capture") || rawLabel.includes("cam link") || rawLabel.includes("hdmi")) {
-                    displayLabel = `⭐ DSLR / Eksternal: ${device.label || "USB Video"}`;
+                    displayLabel = `[DSLR / Eksternal] ${device.label || "USB Video"}`;
                     externalFound = true;
                 } else if (rawLabel.includes("front") || rawLabel.includes("depan")) {
-                    displayLabel = `📱 Kamera Depan HP (${device.label})`;
+                    displayLabel = `[Kamera Depan HP] ${device.label}`;
                 } else if (rawLabel.includes("back") || rawLabel.includes("belakang") || rawLabel.includes("0, facing back")) {
-                    displayLabel = `📱 Kamera Belakang HP (${device.label})`;
+                    displayLabel = `[Kamera Belakang HP] ${device.label}`;
                 } else if (!displayLabel) {
                     displayLabel = `Kamera ${index + 1} (Klik untuk Mencoba)`;
                 }
@@ -198,7 +198,7 @@ async function loadCameraDevices(forceRequest = false) {
             const cameraStatusEl = document.getElementById("cameraStatus");
             if (cameraStatusEl) {
                 if (externalFound) {
-                    cameraStatusEl.innerText = `✅ Kamera Eksternal / DSLR terdeteksi! (${videoDevices.length} kamera total)`;
+                    cameraStatusEl.innerText = `Kamera Eksternal / DSLR terdeteksi! (${videoDevices.length} kamera total)`;
                 } else {
                     cameraStatusEl.innerText = `${videoDevices.length} kamera HP terdeteksi. Colokkan kabel lalu klik Scan.`;
                 }
