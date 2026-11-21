@@ -223,11 +223,11 @@ async function loadCameraDevices(forceRequest = false) {
 
             // Status info kamera
             const cameraStatusEl = document.getElementById("cameraStatus");
-            if (cameraStatusEl) {
+            if (cameraStatusEl && !cameraStatusEl.innerText.includes("Aktif:")) {
                 if (externalFound) {
-                    cameraStatusEl.innerText = `Kamera Eksternal / DSLR terdeteksi! (${videoDevices.length} kamera total)`;
+                    cameraStatusEl.innerText = `Kamera Eksternal / Capture Card terdeteksi! (${videoDevices.length} kamera tersedia)`;
                 } else {
-                    cameraStatusEl.innerText = `${videoDevices.length} kamera HP terdeteksi. Colokkan kabel lalu klik Scan.`;
+                    cameraStatusEl.innerText = `Hanya ${videoDevices.length} kamera internal terdeteksi. Hubungkan capture card lalu klik Scan.`;
                 }
             }
 
@@ -250,17 +250,7 @@ async function loadCameraDevices(forceRequest = false) {
 }
 
 async function startCamera(deviceId = null) {
-    // Hentikan stream kamera sebelumnya jika ada
-    if (currentStream) {
-        currentStream.getTracks().forEach(track => track.stop());
-        currentStream = null;
-    }
-    if (video.srcObject) {
-        const tracks = video.srcObject.getTracks ? video.srcObject.getTracks() : [];
-        tracks.forEach(track => track.stop());
-        video.srcObject = null;
-    }
-
+    const statusEl = document.getElementById("cameraStatus");
     let targetDeviceId = deviceId !== null ? deviceId : (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
 
     // Jika user memilih opsi "[Eksternal]", otomatis cari deviceId dari kamera eksternal di daftar
@@ -314,10 +304,19 @@ async function startCamera(deviceId = null) {
 
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        // Hentikan stream lama HANYA setelah stream baru berhasil dibuka
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+        }
         currentStream = stream;
         video.srcObject = stream;
         safePlayVideo(video);
         await loadCameraDevices();
+        if (statusEl) {
+            const activeTrack = stream.getVideoTracks()[0];
+            const trackLabel = activeTrack && activeTrack.label ? activeTrack.label : "Kamera Aktif";
+            statusEl.innerHTML = `<span class="text-green-600 dark:text-green-400 font-semibold">Aktif: ${trackLabel}</span>`;
+        }
     } catch (error) {
         console.warn("Gagal membuka kamera dengan constraint ideal, mencoba fallback:", error);
         try {
@@ -328,23 +327,32 @@ async function startCamera(deviceId = null) {
                 fallbackConstraints = { video: true };
             }
             const stream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
             currentStream = stream;
             video.srcObject = stream;
             safePlayVideo(video);
             await loadCameraDevices();
+            if (statusEl) {
+                const activeTrack = stream.getVideoTracks()[0];
+                const trackLabel = activeTrack && activeTrack.label ? activeTrack.label : "Kamera Aktif";
+                statusEl.innerHTML = `<span class="text-green-600 dark:text-green-400 font-semibold">Aktif: ${trackLabel}</span>`;
+            }
         } catch (err) {
             console.error("Gagal total mengakses kamera:", err);
-            if (targetDeviceId) {
-                try {
-                    const fallbackDefault = await navigator.mediaDevices.getUserMedia({ video: true });
-                    currentStream = fallbackDefault;
-                    video.srcObject = fallbackDefault;
-                    safePlayVideo(video);
-                    await loadCameraDevices();
-                    return;
-                } catch (e2) {}
+            let userMsg = "Gagal mengakses kamera pilihan.";
+            if (err.name === "NotReadableError" || err.name === "TrackStartError") {
+                userMsg = "Kamera eksternal sedang dipakai aplikasi lain di iPad (FaceTime/Photo Booth/Camo). Tutup aplikasi tersebut dari App Switcher!";
+            } else if (err.name === "OverconstrainedError") {
+                userMsg = "Resolusi kamera tidak cocok dengan Capture Card.";
+            } else if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") {
+                userMsg = "Izin kamera ditolak di Safari. Buka Pengaturan iPad > Safari > Kamera > Izinkan.";
             }
-            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser.");
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-red-500 font-semibold">${userMsg}</span>`;
+            }
+            alert(`${userMsg}\n(Detail: ${err.name})`);
         }
     }
 }
