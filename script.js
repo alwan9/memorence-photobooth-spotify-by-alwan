@@ -205,13 +205,14 @@ async function loadCameraDevices(forceRequest = false) {
                 let rawLabel = (device.label || "").toLowerCase();
                 let displayLabel = device.label;
 
-                if (rawLabel.includes("external") || rawLabel.includes("usb") || rawLabel.includes("uvc") || rawLabel.includes("capture") || rawLabel.includes("cam link") || rawLabel.includes("hdmi")) {
-                    displayLabel = `[DSLR / Eksternal] ${device.label || "USB Video"}`;
+                // Pada iPad / mobile: index >= 2 adalah perangkat kamera eksternal (karena bawaan hanya ada 2 kamera: depan dan belakang)
+                if (rawLabel.includes("external") || rawLabel.includes("usb") || rawLabel.includes("uvc") || rawLabel.includes("capture") || rawLabel.includes("cam link") || rawLabel.includes("hdmi") || index >= 2) {
+                    displayLabel = `[DSLR / Eksternal] ${device.label || `Kamera Eksternal ${index - 1}`}`;
                     externalFound = true;
-                } else if (rawLabel.includes("front") || rawLabel.includes("depan")) {
-                    displayLabel = `[Kamera Depan HP] ${device.label}`;
-                } else if (rawLabel.includes("back") || rawLabel.includes("belakang") || rawLabel.includes("0, facing back")) {
-                    displayLabel = `[Kamera Belakang HP] ${device.label}`;
+                } else if (rawLabel.includes("front") || rawLabel.includes("depan") || index === 0) {
+                    displayLabel = `[Kamera Depan] ${device.label || "Kamera Depan"}`;
+                } else if (rawLabel.includes("back") || rawLabel.includes("belakang") || rawLabel.includes("0, facing back") || index === 1) {
+                    displayLabel = `[Kamera Belakang] ${device.label || "Kamera Belakang"}`;
                 } else if (!displayLabel) {
                     displayLabel = `Kamera ${index + 1} (Klik untuk Mencoba)`;
                 }
@@ -260,20 +261,33 @@ async function startCamera(deviceId = null) {
         video.srcObject = null;
     }
 
-    const targetDeviceId = deviceId !== null ? deviceId : (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
+    let targetDeviceId = deviceId !== null ? deviceId : (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
+
+    // Jika user memilih opsi "[Eksternal]", otomatis cari deviceId dari kamera eksternal di daftar
+    if (targetDeviceId === "__external__") {
+        try {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const vDevs = devices.filter(d => d.kind === "videoinput");
+            const extCandidate = vDevs.find((d, idx) => {
+                const l = (d.label || "").toLowerCase();
+                return l.includes("external") || l.includes("usb") || l.includes("uvc") || l.includes("capture") || l.includes("cam") || l.includes("hdmi") || idx >= 2;
+            }) || (vDevs.length > 2 ? vDevs[vDevs.length - 1] : null);
+
+            if (extCandidate && extCandidate.deviceId) {
+                targetDeviceId = extCandidate.deviceId;
+                if (cameraSelect) cameraSelect.value = targetDeviceId;
+            }
+        } catch (e) {
+            console.log("Error mencari kamera eksternal:", e);
+        }
+    }
 
     const isAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     let constraints = {};
 
-    if (targetDeviceId === "__external__") {
-        constraints = {
-            video: {
-                facingMode: { ideal: "external" }
-            }
-        };
-    } else if (targetDeviceId) {
-        // Pada iPad / Safari dan external capture cards, jangan paksakan width/height kaku agar tidak OverconstrainedError
+    if (targetDeviceId && targetDeviceId !== "__external__") {
+        // Pada iPad / Safari dan external capture cards, gunakan constraint fleksibel agar tidak OverconstrainedError
         constraints = {
             video: isAppleDevice
                 ? { deviceId: { exact: targetDeviceId } }
@@ -282,6 +296,12 @@ async function startCamera(deviceId = null) {
                     width: { ideal: 1920 },
                     height: { ideal: 1080 }
                 }
+        };
+    } else if (targetDeviceId === "__external__") {
+        constraints = {
+            video: isAppleDevice
+                ? { facingMode: "environment" }
+                : { facingMode: { ideal: "external" } }
         };
     } else {
         constraints = {
@@ -302,9 +322,7 @@ async function startCamera(deviceId = null) {
         console.warn("Gagal membuka kamera dengan constraint ideal, mencoba fallback:", error);
         try {
             let fallbackConstraints;
-            if (targetDeviceId === "__external__") {
-                fallbackConstraints = { video: { facingMode: "external" } };
-            } else if (targetDeviceId) {
+            if (targetDeviceId && targetDeviceId !== "__external__") {
                 fallbackConstraints = { video: { deviceId: targetDeviceId } };
             } else {
                 fallbackConstraints = { video: true };
