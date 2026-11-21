@@ -262,23 +262,26 @@ async function startCamera(deviceId = null) {
 
     const targetDeviceId = deviceId !== null ? deviceId : (cameraSelect && cameraSelect.value ? cameraSelect.value : null);
 
+    const isAppleDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
     let constraints = {};
 
     if (targetDeviceId === "__external__") {
         constraints = {
             video: {
-                facingMode: { ideal: "external" },
-                width: { ideal: 1920 },
-                height: { ideal: 1080 }
+                facingMode: { ideal: "external" }
             }
         };
     } else if (targetDeviceId) {
+        // Pada iPad / Safari dan external capture cards, jangan paksakan width/height kaku agar tidak OverconstrainedError
         constraints = {
-            video: {
-                deviceId: { exact: targetDeviceId },
-                width: { ideal: 1920 },
-                height: { ideal: 1080 }
-            }
+            video: isAppleDevice
+                ? { deviceId: { exact: targetDeviceId } }
+                : {
+                    deviceId: { exact: targetDeviceId },
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
         };
     } else {
         constraints = {
@@ -323,7 +326,7 @@ async function startCamera(deviceId = null) {
                     return;
                 } catch (e2) {}
             }
-            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser dan koneksi OTG aktif.");
+            alert("Gagal mengakses kamera. Pastikan izin kamera telah diberikan di browser.");
         }
     }
 }
