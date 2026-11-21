@@ -114,6 +114,135 @@ function toggleDslrHelp() {
     }
 }
 
+function toggleDebugModal() {
+    const modal = document.getElementById("debugModal");
+    if (modal) {
+        modal.classList.toggle("hidden");
+        if (!modal.classList.contains("hidden")) {
+            runCameraDiagnostics();
+        }
+    }
+}
+
+function copyDebugLog() {
+    const debugOutput = document.getElementById("debugLogOutput");
+    if (!debugOutput) return;
+    const text = debugOutput.innerText;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Hasil log diagnosa berhasil disalin!");
+        }).catch(() => {
+            alert("Gagal menyalin log.");
+        });
+    } else {
+        alert("Clipboard tidak didukung di browser ini.");
+    }
+}
+
+async function runCameraDiagnostics() {
+    const debugOutput = document.getElementById("debugLogOutput");
+    if (!debugOutput) return;
+
+    debugOutput.innerHTML = "<div>Memeriksa sistem kamera dan koneksi perangkat...</div>";
+    let logs = [];
+
+    const isIPad = /iPad/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isIPhone = /iPhone/.test(navigator.userAgent);
+
+    logs.push(`📱 <strong>Perangkat:</strong> ${isIPad ? "iPad" : isIPhone ? "iPhone" : "Komputer / Android"}`);
+    logs.push(`🌐 <strong>Browser:</strong> ${navigator.userAgent.slice(0, 100)}...`);
+    logs.push(`🔒 <strong>Protokol:</strong> ${window.location.protocol} (Kamera wajib diakses via HTTPS)`);
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        logs.push(`<div class="text-red-500 font-bold">❌ FATAL: Browser Anda tidak mendukung WebRTC navigator.mediaDevices.</div>`);
+        debugOutput.innerHTML = logs.map(l => `<div class="mb-1">${l}</div>`).join("");
+        return;
+    }
+
+    try {
+        logs.push(`⏳ Menguji izin akses kamera...`);
+        // Buka stream awal untuk memastikan permission aktif
+        const testStream = await navigator.mediaDevices.getUserMedia({ video: true });
+        logs.push(`✅ Izin kamera di Safari/Browser: <span class="text-green-500 font-bold">DIIZINKAN</span>`);
+
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoDevices = devices.filter(d => d.kind === "videoinput");
+
+        logs.push(`📷 Total kamera terdeteksi di iPad: <strong>${videoDevices.length} kamera</strong>`);
+
+        videoDevices.forEach((d, i) => {
+            let label = d.label || `(Label kamera disembunyikan browser)`;
+            logs.push(`   [Kamera ${i + 1}] Nama: <strong>"${label}"</strong>`);
+        });
+
+        if (videoDevices.length <= 2) {
+            logs.push(`<div class="mt-2 p-2 bg-red-500/20 text-red-600 dark:text-red-400 rounded border border-red-500/30">
+                <strong>⚠️ MASALAH UTAMA:</strong><br>
+                iPad hanya mendeteksi <strong>${videoDevices.length} kamera</strong> (Hanya kamera depan & belakang bawaan iPad).<br>
+                <strong>Capture Card / Sony A6400 sama sekali BELUM TERBACA oleh sistem iPadOS.</strong><br><br>
+                <strong>Penyebab & Solusi:</strong><br>
+                1. <strong>Salah Lubang Colokan:</strong> Kamera Sony A6400 memiliki 2 lubang di samping. Lubang atas adalah <em>Micro-USB</em> (charger), lubang bawah adalah <em>Micro-HDMI</em>. Kabel WAJIB dicolok ke <strong>lubang bawah (Micro-HDMI)</strong>.<br>
+                2. <strong>Adapter Type-C iPad:</strong> Jika Anda memakai adapter USB-A ke Type-C, pastikan adapter tersebut mendukung <strong>jalur data OTG</strong> (bukan kabel charger biasa).<br>
+                3. <strong>Versi iPadOS:</strong> Pastikan iPad Anda sudah menjalankan <strong>iPadOS 17 ke atas</strong> di <em>Pengaturan > Umum > Mengenai</em>.<br>
+                4. <strong>Resolusi Sony:</strong> Di menu Sony A6400, buka <em>Setup > HDMI Settings</em>, ubah <em>HDMI Resolution</em> ke <strong>1080p</strong> (jangan 4K/2160p).
+            </div>`);
+        } else {
+            logs.push(`<div class="mt-2 p-2 bg-green-500/20 text-green-600 dark:text-green-400 rounded border border-green-500/30">
+                <strong>✅ Capture Card / Kamera Eksternal TERDETEKSI (Kamera ke-3)!</strong><br>
+                Mencoba menguji koneksi langsung ke kamera eksternal...
+            </div>`);
+
+            // Cari kamera eksternal
+            const extDev = videoDevices.find((d, idx) => {
+                const l = (d.label || "").toLowerCase();
+                return l.includes("usb") || l.includes("capture") || l.includes("hdmi") || l.includes("cam") || l.includes("external") || idx >= 2;
+            }) || videoDevices[videoDevices.length - 1];
+
+            try {
+                const extStream = await navigator.mediaDevices.getUserMedia({
+                    video: { deviceId: { exact: extDev.deviceId } }
+                });
+                const track = extStream.getVideoTracks()[0];
+                const settings = track.getSettings ? track.getSettings() : {};
+                logs.push(`<div class="p-2 bg-green-600 text-white rounded font-bold">
+                    🎉 SUKSES! Kamera Sony A6400 berhasil dibuka!<br>
+                    Resolusi: ${settings.width || 1920} x ${settings.height || 1080}
+                </div>`);
+
+                // Alihkan langsung ke video utama
+                if (currentStream) {
+                    currentStream.getTracks().forEach(t => t.stop());
+                }
+                currentStream = extStream;
+                video.srcObject = extStream;
+                safePlayVideo(video);
+                testStream.getTracks().forEach(t => t.stop());
+
+                const statusEl = document.getElementById("cameraStatus");
+                if (statusEl) {
+                    statusEl.innerHTML = `<span class="text-green-600 dark:text-green-400 font-bold">Aktif: ${track.label || "Sony A6400 (Capture Card)"}</span>`;
+                }
+            } catch (extErr) {
+                logs.push(`<div class="mt-2 p-2 bg-yellow-500/20 text-yellow-800 dark:text-yellow-300 rounded border border-yellow-500/30">
+                    <strong>⚠️ Capture Card terdeteksi tapi gagal dibuka:</strong><br>
+                    Error: <code>${extErr.name} - ${extErr.message}</code><br><br>
+                    <strong>Solusi:</strong><br>
+                    ${extErr.name === "NotReadableError" || extErr.name === "TrackStartError" 
+                        ? "• Kamera eksternal sedang dipakai/terkunci oleh aplikasi lain (seperti FaceTime, Photo Booth, atau Camo). <strong>Buka App Switcher iPad lalu tutup semua aplikasi lain!</strong>" 
+                        : "• Pastikan kamera Sony dalam keadaan ON dan Live View aktif di mode Movie/Manual."}
+                </div>`);
+            }
+        }
+    } catch (err) {
+        logs.push(`<div class="mt-2 p-2 bg-red-500/20 text-red-600 dark:text-red-400 rounded border border-red-500/30">
+            <strong>❌ Gagal meminta izin kamera:</strong> <code>${err.name} - ${err.message}</code><br>
+            ${err.name === "NotAllowedError" ? "Izin kamera ditolak di Safari. Buka Pengaturan iPad > Safari > Kamera > Izinkan." : ""}
+        </div>`);
+    }
+
+    debugOutput.innerHTML = logs.map(l => `<div class="mb-1">${l}</div>`).join("");
+}
+
 function safePlayVideo(el) {
     if (!el) return;
     try {

@@ -358,8 +358,36 @@
                             </div>
                             <div class="flex items-center justify-between mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
                                 <span id="cameraStatus">Mendeteksi kamera...</span>
-                                <button type="button" onclick="toggleDslrHelp()" class="underline text-green-600 dark:text-green-400 cursor-pointer hover:opacity-80">
-                                    Kenapa DSLR belum muncul?
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="toggleDebugModal()" class="underline text-blue-600 dark:text-blue-400 font-semibold cursor-pointer hover:opacity-80">
+                                        🔍 Debug Kamera Sony
+                                    </button>
+                                    <button type="button" onclick="toggleDslrHelp()" class="underline text-green-600 dark:text-green-400 cursor-pointer hover:opacity-80">
+                                        Panduan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal Debug Kamera Sony -->
+                        <div id="debugModal" class="hidden mt-2 p-3 bg-zinc-100 dark:bg-zinc-800 rounded-md text-xs text-zinc-800 dark:text-zinc-200 border-2 border-blue-500/50 shadow-lg">
+                            <div class="flex items-center justify-between font-bold mb-2 pb-1.5 border-b border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-100">
+                                <span class="flex items-center gap-1.5 text-blue-600 dark:text-blue-400 font-semibold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m19.44 12.99l-.01.02c.04-.33.07-.66.07-.99s-.03-.66-.07-.99l.01.02l2.44-1.92l-2.43-4.22l-2.87 1.16v.01c-.52-.4-1.11-.74-1.74-.98V5h-4.86v2.09c-.63.24-1.22.58-1.74.98v-.01L5.37 6.9l-2.43 4.22l2.44 1.92l.01-.02c-.04.33-.07.66-.07.99s.03.66.07.99l-.01-.02L2.94 17l2.43 4.22l2.87-1.16v-.01c.52.4 1.11.74 1.74.98V23h4.86v-2.09c.63-.24 1.22-.58 1.74-.98v.01l2.87 1.16l2.43-4.22zm-7.44 3c-2.21 0-4-1.79-4-4s1.79-4 4-4s4 1.79 4 4s-1.79 4-4 4"/></svg>
+                                    Hasil Diagnosa Kamera Sony / Capture Card
+                                </span>
+                                <button type="button" onclick="toggleDebugModal()" class="text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 font-bold px-1.5 text-sm">✕</button>
+                            </div>
+                            <div id="debugLogOutput" class="max-h-60 overflow-y-auto space-y-1 font-mono text-[11px] leading-relaxed bg-white dark:bg-zinc-900 p-2.5 rounded border border-zinc-200 dark:border-zinc-700">
+                                Memuat diagnostik kamera...
+                            </div>
+                            <div class="mt-2.5 flex items-center justify-between gap-2">
+                                <button type="button" onclick="runCameraDiagnostics()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded font-medium text-xs flex items-center gap-1 transition cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"><path fill="currentColor" d="M12 20q-3.35 0-5.675-2.325T4 12t2.325-5.675T12 4q1.725 0 3.3.712T18 6.75V4h2v6h-6V8h3.2q-.8-1.4-2.187-2.2T12 5Q9.075 5 7.037 7.038T5 12t2.038 4.963T12 19q2.625 0 4.588-1.7T18.9 14h2.05q-.35 3.175-2.75 5.088T12 20"/></svg>
+                                    Uji Diagnosa Ulang
+                                </button>
+                                <button type="button" onclick="copyDebugLog()" class="px-2.5 py-1.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-200 rounded text-xs transition cursor-pointer">
+                                    Salin Log
                                 </button>
                             </div>
                         </div>
