@@ -269,6 +269,12 @@
                             <div class="video-border  border-warna dark:border-zinc-200 border-4 rounded-sm">
                                 <video id="video" autoplay playsinline class=" video rounded-sm  z-1 "></video>
                             </div>
+                            <!-- Tombol Flip / Mirror Video (Sangat berguna untuk kamera eksternal / DSLR agar tulisan tidak terbalik) -->
+                            <button type="button" onclick="toggleMirrorVideo()" id="mirrorBtn" title="Balik / Cermin Tampilan Video"
+                                class="absolute top-5 left-5 z-[99] bg-zinc-950/60 hover:bg-zinc-900 text-white p-2 rounded-lg text-xs flex items-center gap-1.5 backdrop-blur-sm border border-white/20 cursor-pointer transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2v20c-4.42 0-8-3.58-8-8s3.58-8 8-8m0-2C5.37 0 0 5.37 0 12s5.37 12 12 12s12-5.37 12-12S18.63 0 12 0m2 4.15V20c3.9 0 7-3.13 7-7.08s-3.1-7.07-7-7.77"/></svg>
+                                <span class="hidden sm:inline">Flip Kamera</span>
+                            </button>
                             <div
                                 class="w-[50px] h-[50px] rounded-lg bg-zinc-950/50 flex justify-center items-center z-[99] right-5 top-5 absolute">
                                 <p id="timer" class="text-2xl px-3 py-2 rounded-lg  font-bold  "></p>

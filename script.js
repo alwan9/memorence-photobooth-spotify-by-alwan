@@ -6,8 +6,16 @@ let timerDisplay = document.getElementById("timer");
 const timeSelect = document.getElementById("timeSelect");
 const cameraSelect = document.getElementById("cameraSelect");
 let currentStream = null;
+let isMirrored = true;
 let countdown; // supaya bisa clearInterval kalau pilih baru
 let selectedTime = 1; // default 1 detik, seperti awal
+
+function toggleMirrorVideo() {
+    isMirrored = !isMirrored;
+    if (video) {
+        video.style.transform = isMirrored ? "scaleX(-1)" : "scaleX(1)";
+    }
+}
 
 //  agar format nama download menggunakan tanggah hari ini
 let d = new Date();
@@ -492,8 +500,10 @@ function drawVideoWithCoverStyle(video, context, canvas) {
     }
 
     context.save();
-    context.translate(canvas.width, 0);
-    context.scale(-1, 1);
+    if (isMirrored) {
+        context.translate(canvas.width, 0);
+        context.scale(-1, 1);
+    }
     context.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
     context.restore();
 }
